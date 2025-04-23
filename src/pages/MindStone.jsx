@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
 import IronMan from '../Images/IronMan.png';
+import ArcReactor from '../Images/ArcReactor.png';
 import VishnuC from '../Certificates/Vishnu C.jpg';
 import VishnuSQL from '../Certificates/Vishnu SQL.jpg';
 import VishnuMongoDB from '../Certificates/Vishnu MongoDB.jpg';
@@ -115,6 +116,45 @@ export default function MindStone() {
     };
 
     sequence();
+
+    // Prevent right-click
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+    };
+
+    // Prevent keyboard shortcuts
+    const handleKeyDown = (e) => {
+      // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+      if (
+        e.keyCode === 123 || 
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
+        (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    // Prevent dev tools through console
+    const preventDevTools = () => {
+      const devtools = /./;
+      devtools.toString = function() {
+        this.opened = true;
+      }
+      console.log('%c', devtools);
+    };
+
+    // Add event listeners
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('devtoolschange', preventDevTools);
+    preventDevTools();
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('devtoolschange', preventDevTools);
+    };
   }, []);
 
   return (
@@ -141,48 +181,64 @@ export default function MindStone() {
           {/* Subtle noise texture */}
           <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }} />
         </div>
-         {/* Arc Reactor Background - Enhanced & More Powerful */}
-         <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
-           {/* Outer Glowing Ring (Blue/Cyan) */}
-           <div className="absolute w-[920px] h-[920px] rounded-full border-[16px] border-blue-300/20 blur-3xl animate-pulse" />
-           {/* Outer Orange Glow Ring */}
-           <div className="absolute w-[860px] h-[860px] rounded-full border-[14px] border-yellow-400/20 blur-3xl animate-pulse" style={{ animationDelay: '0.3s' }} />
-           {/* Outer Ring */}
-           <div className="absolute w-[760px] h-[760px] rounded-full border-[10px] border-cyan-300/50 shadow-[0_0_100px_24px_rgba(0,255,255,0.22)] animate-spin-slow" />
-           {/* Extra Glow Overlay (Blue/Yellow) */}
-           <div className="absolute w-[900px] h-[900px] rounded-full bg-gradient-radial from-yellow-300/15 via-blue-300/15 to-transparent blur-3xl opacity-80 animate-pulse" />
-           {/* Pulsing Middle Ring (Yellow) */}
-           <div className="absolute w-[600px] h-[600px] rounded-full border-[10px] border-yellow-200/40 animate-pulse shadow-[0_0_50px_12px_rgba(255,215,0,0.12)]" style={{ animationDelay: '0.4s' }} />
-           {/* Inner Ring (Cyan) */}
-           <div className="absolute w-[420px] h-[420px] rounded-full border-[10px] border-cyan-100/80 animate-spin-reverse-slow" />
-           {/* Core Glow (Orange/Yellow) */}
-           <div className="absolute w-[280px] h-[280px] rounded-full bg-gradient-to-br from-yellow-100 via-yellow-400 to-white blur-3xl opacity-95 animate-pulse" style={{ animationDelay: '1.5s' }} />
-           {/* Core (Gold/Orange) */}
-           <div className="absolute w-[220px] h-[220px] rounded-full bg-gradient-to-br from-yellow-100 via-yellow-300 to-orange-600 shadow-[0_0_90px_20px_rgba(255,215,0,0.22)] border-4 border-yellow-200 animate-pulse" style={{ animationDelay: '1.8s' }} />
-           {/* Electric Arcs - Blue/Orange/Yellow energetic */}
-           <div className="absolute w-[920px] h-[920px] pointer-events-none">
-             {[...Array(24)].map((_, i) => (
-               <div
-                 key={i}
-                 className="absolute w-full h-full"
-                 style={{
-                   transform: `rotate(${i * 15}deg)`,
-                 }}
-               >
-                 <div className="absolute top-0 left-1/2 w-[4px] h-48 bg-gradient-to-b from-yellow-200 via-orange-400 via-60% to-blue-400/0 animate-electric-arc"
+         {/* Arc Reactor Background with Image */}
+         <div className="fixed inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+           {/* Base Arc Reactor Image */}
+           <div className="relative w-[800px] h-[800px]">
+             <img 
+               src={ArcReactor}
+               alt="Arc Reactor"
+               className="w-full h-full object-contain"
+             />
+             
+             {/* Electric Arcs Container */}
+             <div className="absolute inset-0 flex items-center justify-center">
+               {/* Inner Electric Arcs */}
+               {[...Array(8)].map((_, i) => (
+                 <div
+                   key={`inner-${i}`}
+                   className="absolute w-[400px] h-1"
                    style={{
-                     animationDelay: `${i * 0.05}s`,
-                     filter: 'drop-shadow(0 0 32px #ffd700dd) drop-shadow(0 0 36px #00eaffaa)',
-                     transform: 'translateX(-50%)',
-                     opacity: 0.8 + 0.2 * Math.sin(i)
+                     transform: `rotate(${i * 45}deg)`,
                    }}
-                 />
-               </div>
-             ))}
+                 >
+                   <div 
+                     className="w-full h-full bg-gradient-to-r from-blue-500/0 via-blue-400 to-blue-500/0 
+                              animate-electric-pulse blur-[2px]"
+                     style={{
+                       animationDelay: `${i * 0.15}s`,
+                     }}
+                   />
+                 </div>
+               ))}
+               
+               {/* Outer Lightning Bolts */}
+               {[...Array(6)].map((_, i) => (
+                 <div
+                   key={`outer-${i}`}
+                   className="absolute w-[600px] h-[2px]"
+                   style={{
+                     transform: `rotate(${i * 60}deg)`,
+                   }}
+                 >
+                   <div 
+                     className="w-full h-full bg-gradient-to-r from-transparent via-blue-400 to-transparent 
+                              opacity-0 animate-lightning blur-sm"
+                     style={{
+                       animationDelay: `${i * 0.5}s`,
+                     }}
+                   />
+                 </div>
+               ))}
+             </div>
+
+             {/* Glow Effect */}
+             <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-3xl animate-glow-pulse"></div>
            </div>
-           {/* Subtle electric glow overlay (Yellow/Blue) */}
-           <div className="absolute w-[1200px] h-[1200px] rounded-full bg-gradient-radial from-yellow-200/10 via-blue-400/12 to-transparent blur-3xl opacity-80 animate-pulse" />
          </div>
+
+        {/* Overlay for better content visibility */}
+        <div className="fixed inset-0 bg-gradient-to-br from-slate-900/85 via-slate-800/75 to-slate-900/85 pointer-events-none"></div>
 
         {/* Starfield overlay */}
         <div className="absolute inset-0 bg-stars bg-repeat opacity-60 z-0" />
@@ -221,49 +277,54 @@ export default function MindStone() {
           </p>
         </div>
 
-        {/* Certifications Section - appears only after intro/hero message */}
-        {contentVisible && (
-          <section className="relative z-10 w-full max-w-5xl mx-auto mt-24 flex flex-col items-center gap-8 animate-fadein-slow">
-            <h2 className="text-2xl md:text-3xl font-bold text-yellow-300 mb-6 tracking-wide text-center drop-shadow animate-fadein-slow">Professional Certifications</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-              {certifications.map((cert, idx) => (
-                <div key={idx} className="bg-gradient-to-br from-yellow-700/90 via-orange-500/70 via-70% to-yellow-100/20 rounded-xl p-6 shadow-2xl border-2 border-yellow-400/40 flex flex-col gap-2 backdrop-blur-2xl hover:shadow-[0_0_42px_8px_rgba(255,215,0,0.16)] transition-all duration-300 group relative overflow-hidden">
-                  {/* Extra glowing border for the card */}
-                  <div className="absolute inset-0 rounded-xl pointer-events-none border-2 border-yellow-300/50 blur-[2px] opacity-60 group-hover:opacity-90 transition-all duration-300" />
-                  {/* Subtle gradient overlay */}
-                  <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-br from-yellow-200/5 via-transparent to-yellow-400/5 opacity-60 group-hover:opacity-80 transition-all duration-300" />
-                  {cert.image && (
-                    <div className="relative">
-                      <img
-                        src={cert.image}
-                        alt={cert.title + ' Certificate'}
-                        className="w-full max-h-36 object-contain mb-2 rounded-md border-2 border-yellow-400 shadow-lg bg-black/20 group-hover:scale-[1.02] transition-transform duration-300"
-                        style={{ background: 'linear-gradient(90deg,#fff2 60%,#ffd70011 100%)' }}
-                      />
-                      <button
-                        onClick={() => window.open(cert.image, '_blank')}
-                        className="absolute top-2 right-2 p-2 bg-yellow-900/90 hover:bg-yellow-800/90 rounded-full transition-all duration-300 group-hover:scale-110 group"
-                        title="View certificate in new tab"
-                      >
-                        <ExternalLink className="w-4 h-4 text-yellow-200 group-hover:text-yellow-100 transition-colors" />
-                      </button>
+        {/* Main Content */}
+        <div className="relative z-10 w-full max-w-5xl mx-auto mt-24 flex flex-col items-center gap-8">
+          {/* Certifications Section - appears only after intro/hero message */}
+          {contentVisible && (
+            <section className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center gap-8 animate-fadein-slow">
+              <h2 className="text-2xl md:text-3xl font-bold text-yellow-300 mb-6 tracking-wide text-center drop-shadow animate-fadein-slow">Professional Certifications</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+                {certifications.map((cert, idx) => (
+                  <div key={idx} className="bg-gradient-to-br from-yellow-700/90 via-orange-500/70 via-70% to-yellow-100/20 rounded-xl p-6 shadow-2xl border-2 border-yellow-400/40 flex flex-col gap-2 backdrop-blur-2xl hover:shadow-[0_0_42px_8px_rgba(255,215,0,0.16)] transition-all duration-300 group relative overflow-hidden">
+                    {/* Extra glowing border for the card */}
+                    <div className="absolute inset-0 rounded-xl pointer-events-none border-2 border-yellow-300/50 blur-[2px] opacity-60 group-hover:opacity-90 transition-all duration-300" />
+                    {/* Subtle gradient overlay */}
+                    <div className="absolute inset-0 rounded-xl pointer-events-none bg-gradient-to-br from-yellow-200/5 via-transparent to-yellow-400/5 opacity-60 group-hover:opacity-80 transition-all duration-300" />
+                    {cert.image && (
+                      <div className="relative">
+                        <img
+                          src={cert.image}
+                          alt={cert.title + ' Certificate'}
+                          className="w-full max-h-36 object-contain mb-2 rounded-md border-2 border-yellow-400 shadow-lg bg-black/20 group-hover:scale-[1.02] transition-transform duration-300"
+                          style={{ background: 'linear-gradient(90deg,#fff2 60%,#ffd70011 100%)' }}
+                        />
+                        <button
+                          onClick={() => window.open(cert.image, '_blank')}
+                          className="absolute top-2 right-2 p-2 bg-yellow-900/90 hover:bg-yellow-800/90 rounded-full transition-all duration-300 group-hover:scale-110 group"
+                          title="View certificate in new tab"
+                        >
+                          <ExternalLink className="w-4 h-4 text-yellow-200 group-hover:text-yellow-100 transition-colors" />
+                        </button>
+                      </div>
+                    )}
+                    <h3 className="text-xl font-semibold text-yellow-200 mb-1 group-hover:text-yellow-100 transition-colors">{cert.title}</h3>
+                    <div className="flex items-center text-yellow-100 text-sm mb-2">
+                      <span className="mr-2">{cert.issuer}</span>
+                      <span className="mx-2 text-yellow-400">•</span>
+                      <span>{cert.date}</span>
                     </div>
-                  )}
-                  <h3 className="text-xl font-semibold text-yellow-200 mb-1 group-hover:text-yellow-100 transition-colors">{cert.title}</h3>
-                  <div className="flex items-center text-yellow-100 text-sm mb-2">
-                    <span className="mr-2">{cert.issuer}</span>
-                    <span className="mx-2 text-yellow-400">•</span>
-                    <span>{cert.date}</span>
+                    <p className="text-yellow-50 text-sm opacity-90 group-hover:opacity-100 transition-opacity">{cert.description}</p>
                   </div>
-                  <p className="text-yellow-50 text-sm opacity-90 group-hover:opacity-100 transition-opacity">{cert.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+                ))}
+              </div>
+            </section>
+          )}
 
-        {/* Extra space at the end of the page for better appearance */}
-        {contentVisible && <div className="w-full h-24 md:h-36 lg:h-48" />}
+          {/* Bottom Spacing - Responsive */}
+          {contentVisible && (
+            <div className="w-full py-16 md:py-24 lg:py-32" aria-hidden="true" />
+          )}
+        </div>
 
         <style>{`
           @keyframes float {
@@ -280,16 +341,43 @@ export default function MindStone() {
             from { opacity: 0; transform: translateY(24px); }
             to { opacity: 1; transform: translateY(0); }
           }
-          @keyframes electric-arc {
-            0% { height: 0; opacity: 0; }
-            30% { height: 48px; opacity: 1; }
-            60% { height: 96px; opacity: 0.95; }
-            80% { height: 36px; opacity: 0.7; }
-            100% { height: 0; opacity: 0; }
+          @keyframes electric-pulse {
+            0%, 100% { 
+              opacity: 0;
+              transform: scaleX(0.5) translateX(-20%);
+            }
+            50% { 
+              opacity: 0.8;
+              transform: scaleX(1.2) translateX(20%);
+            }
           }
-          .animate-electric-arc {
-            animation: electric-arc 1.7s cubic-bezier(0.4,0,0.2,1) infinite alternate;
-            will-change: height, opacity;
+          @keyframes lightning {
+            0% { 
+              opacity: 0;
+              transform: scaleX(0.3) translateX(-50%);
+            }
+            10%, 30% { 
+              opacity: 0.9;
+              filter: brightness(1.5);
+              transform: scaleX(1.2) translateX(10%);
+            }
+            40%, 100% { 
+              opacity: 0;
+              transform: scaleX(0.3) translateX(50%);
+            }
+          }
+          @keyframes glow-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+          }
+          .animate-electric-pulse {
+            animation: electric-pulse 2s ease-in-out infinite;
+          }
+          .animate-lightning {
+            animation: lightning 4s ease-out infinite;
+          }
+          .animate-glow-pulse {
+            animation: glow-pulse 3s ease-in-out infinite;
           }
         `}</style>
       </div>

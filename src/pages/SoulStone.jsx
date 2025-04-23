@@ -66,6 +66,38 @@ export default function SoulStone() {
   ];
 
   useEffect(() => {
+    // Prevent right-click
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+    };
+
+    // Prevent keyboard shortcuts
+    const handleKeyDown = (e) => {
+      // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+      if (
+        e.keyCode === 123 || 
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
+        (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    // Prevent dev tools through console
+    const preventDevTools = () => {
+      const devtools = /./;
+      devtools.toString = function() {
+        this.opened = true;
+      }
+      console.log('%c', devtools);
+    };
+
+    // Add event listeners
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('devtoolschange', preventDevTools);
+    preventDevTools();
+
     const sequence = async () => {
       setShowHero(true);
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -82,6 +114,13 @@ export default function SoulStone() {
     };
 
     sequence();
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('devtoolschange', preventDevTools);
+    };
   }, []);
 
   const handleSubmit = async (e) => {
