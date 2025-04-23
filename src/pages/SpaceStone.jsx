@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import CaptainAmerica from '../Images/CaptainAmerica.png';
 import Nagavishnu from "../assets/Nagavishnu Karthik.jpg";
 import { Mail as LucideMail, Phone, MapPin, Linkedin, GraduationCap } from 'lucide-react';
+import VishnuPDF from '../assets/Vishnu Resume (2).pdf';
 
 export default function SpaceStone() {
   const navigate = useNavigate();
@@ -208,7 +209,7 @@ Nagavishnu Karthik B S
                 <hr className="my-3 border-blue-700/50" />
                 <div className="flex items-center gap-2 text-blue-100 justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="lucide lucide-file-text text-blue-300" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
-                  <a href="/Vishnu Resume (2).pdf" download className="no-underline hover:text-blue-400 font-semibold">Download Resume</a>
+                  <a href={VishnuPDF} download className="no-underline hover:text-blue-400 font-semibold">Download Resume</a>
                 </div>
               </div>
             </div>
