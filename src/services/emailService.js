@@ -1,7 +1,6 @@
 import emailjs from '@emailjs/browser';
 
-// Initialize EmailJS with your public key
-emailjs.init("um9KZbLzu6fmwfJQi"); // Replace with your actual EmailJS public key
+emailjs.init("um9KZbLzu6fmwfJQi");
 
 export const sendEmail = async (formData) => {
   try {
